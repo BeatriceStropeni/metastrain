@@ -17,14 +17,14 @@ class Edge:
     self.length = length
     self.sequence = sequence
     self.reads = []
-
+  
   def __iter__(self):
     return iter([self.id, self.length, self.coverage_reads, self.sequence, self.reads])
 
   def addReads(self, read):
     self.reads.append(read)
 
-f_gr = open("/athena/masonlab/scratch/users/lam4003/MIAB_Nanopore_99/sample_6_mag_20/agathobacter_rectarectalis/assembly_graph.gfa","r")
+f_gr = open("/athena/masonlab/scratch/users/lam4003/MIAB_Nanopore_99/sample_6_mag_20/agathobacter_rectalis/assembly_graph.gfa","r")
 lines = f_gr.readlines()
 edges = {}
 for index, line in enumerate(lines):
@@ -42,7 +42,7 @@ for line in lines: #for every reads
   for ed in e:
     if ed != "":
       x = int(ed[5:])
-	  count_coverage[x-1] += int(l[9])
+      count_coverage[x-1] += int(l[9])
       reads_perc = (int(l[3])-int(l[2]))/int(l[1])
       if reads_perc >=0.75:
         edges[x].addReads(l[0])
@@ -65,7 +65,7 @@ with open("/athena/ihlab/scratch/bes4014/edges.csv", "w") as outfile:
       sequence = SeqRecord(Seq(edges[index].sequence),"edge_"+str(index),"","")
       sequences.append(sequence)
     else:
-	  if(edges[index].coverage_reads<10):
+      if(edges[index].coverage_reads<10):
         csv.writer(low_cov).writerow(edges[index])
       else:
         csv.writer(low_len).writerow(edges[index])
@@ -88,7 +88,7 @@ while merged:
   results = []
   while graphs:
     common, rest = graphs[0], graphs[1:]
-	graphs = []
+    graphs = []
     for x in rest:
       if x.isdisjoint(common):
         graphs.append(x)
@@ -103,4 +103,12 @@ with open("/athena/ihlab/scratch/bes4014/link.csv", "w") as outfile:
   for graph in graphs:
     writer.writerow(graph)
 with open("/athena/ihlab/scratch/bes4014/edges.fasta", "w") as output_handle:
-    SeqIO.write(sequences, output_handle, "fasta")
+  SeqIO.write(sequences, output_handle, "fasta")
+
+edgestowrite = []
+for sequence in sequences:
+  if sequence.id == "edge_567" or sequence.id == "edge_612":
+    edgestowrite.append(sequence)
+
+with open("/athena/ihlab/scratch/bes4014/edges_567_612.fasta", "w") as output_handle:
+  SeqIO.write(edgestowrite, output_handle, "fasta")
