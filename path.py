@@ -9,6 +9,7 @@ for line in lines:
     endedge = l[3].split("_")[1]
     if startedge == "567" or startedge == "612" or endedge == "567" or endedge == "612":
       link.append([l[1],l[3]])
+      print(line)
   if l[0] == "P":
     edges = l[2].split(",")
     for edge in edges:
