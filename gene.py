@@ -16,7 +16,7 @@ for line in lines:
     else:
       reads[l[0]] = [l[2]]
 with open(args.save_path+"/"+Path(args.sam_path).stem+"_gene.csv", "w") as outfile:
-  outfile.write('element genes \n')
+  outfile.write('genes element \n')
   for index, e in reads.items():
     outfile.write(index+','+str(e)+'\n')
 f_sam.close()

@@ -6,7 +6,7 @@ import sys
 Prune edges from re-assembled graph to simplify the initial strain problem 
 '''
 
-# sys.argv[1]: Edge metadata CSV [id,length,contigs,reads,coverage_contigs,coverage_reads]
+# sys.argv[1]: Edge metadata CSV [id,length,contigs,reads,coverage_contigs,coverage_reads,sequence]
 
 # Extract edges to keep 
 edge_df = pd.read_csv(sys.argv[1], header = 0,sep = ';')
