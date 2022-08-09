@@ -9,7 +9,7 @@ Prune edges from re-assembled graph to simplify the initial strain problem
 # sys.argv[1]: Edge metadata CSV [id,length,contigs,reads,coverage_contigs,coverage_reads]
 
 # Extract edges to keep 
-edge_df = pd.read_csv(sys.argv[1], header = 0)
+edge_df = pd.read_csv(sys.argv[1], header = 0, sep = ';')
 edge_nums = list(edge_df['id'])
 edge_lst = ['edge_' + str(i) for i in edge_nums]
 prefix = join(*basename(sys.argv[1]).split('.')[:-1])
@@ -49,4 +49,4 @@ p_df = pd.read_csv('P.tsv', header = None, sep = '\t') # P contig_X edge_Y,edge_
 p_pruned = p_df.apply(lambda row : remove_edges(row, edge_lst), axis = 1)
 p_pruned.dropna(how = 'all', inplace = True)
 # p_out = p_df[p_df[1].isin(ctg_lst)]
-p_out.to_csv('P_pruned_' + prefix + '.tsv', header = False, index = False, sep = '\t')
+p_pruned.to_csv('P_pruned_' + prefix + '.tsv', header = False, index = False, sep = '\t')
