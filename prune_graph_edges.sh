@@ -5,7 +5,7 @@ Prune edges from re-assembled graph to simplify the initial strain problem
 DESCRIPTION
 
 # $1: Assembly graph (GFA, 4 components- header (edges), segments, links (connections), paths (contigs)))
-# $2: Edge metadata CSV [id,length,contigs,reads,coverage_contigs,coverage_reads,sequence]
+# $2: Edge metadata CSV [id,length,contigs,reads,coverage_reads,coverage_contigs]
 
 # Split GFA file according to value in first column
 awk -F"\t" '{outfile=($1 ".tsv") ; print $0 >>outfile ; close(outfile)}' < $1
