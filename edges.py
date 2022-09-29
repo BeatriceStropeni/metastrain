@@ -12,29 +12,22 @@ class Edge:
   sequence = ""
   coverage_reads = 0
   reads = None
-  coverage_contigs = 0
-  contigs = None
 
   def __init__ (self, id, length, sequence):
     self.id = id
     self.length = length
     self.sequence = sequence
     self.reads = []
-    self.contigs = []
 
   def __iter__(self):
-    return iter([self.id, self.length, self.contigs, self.reads, self.coverage_reads, self.coverage_contigs])
+    return iter([self.id, self.length, self.reads, self.coverage_reads])
 
   def addReads(self, read):
     self.reads.append(read)
 
-  def addContigs(self, contig):
-    self.contigs.append(contig)
-
 parser = argparse.ArgumentParser(description="")
 parser.add_argument("gfa_path", type=str, help="GFA file path")
 parser.add_argument("gaf_path_reads", type=str, help="GAF file path for the reads alignment")
-parser.add_argument("gaf_path_contigs", type=str, help="GAF file path for the contigs alignment")
 parser.add_argument("save_path", type=str, help="Path for storing file, don't insert / at the end")
 args = parser.parse_args()
 
@@ -63,23 +56,8 @@ for line in lines: #for every reads
 for index, e in edges.items():
   e.coverage_reads = count_coverage[index-1]/e.length
 
-f_al = open(args.gaf_path_contigs,"r")
-lines = f_al.readlines()
-count_coverage = np.zeros(len(edges))
-for line in lines: #for every reads
-  l = line.split()
-  e = re.split("<|>",l[5]) #edge mapped to the reads
-  for ed in e:
-    if ed != "":
-      x = int(ed[5:])
-      count_coverage[x-1] += int(l[9])
-      edges[x].addContigs(l[0])
-
-for index, e in edges.items():
-  e.coverage_contigs = count_coverage[index-1]/e.length
-
 sequences = []
-fieldnames = ['id', 'length', 'contigs', 'reads', 'coverage_reads', 'coverage_contigs']
+fieldnames = ['id', 'length', 'reads', 'coverage_reads']
 with open(args.save_path+"/edges.csv", "w") as outfile:
   writer = csv.writer(outfile,delimiter=';')
   writer.writerow(fieldnames)
